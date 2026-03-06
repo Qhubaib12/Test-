@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Under Maintenance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #050810;
+      --surface: #0c1020;
+      --accent: #00e5ff;
+      --accent2: #7b5ea7;
+      --text: #e8eaf6;
+      --muted: #5c6480;
+      --glow: rgba(0, 229, 255, 0.15);
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── Canvas background ── */
+    canvas#stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* ── Noise grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 180px;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* ── Glowing orb ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,229,255,0.12) 0%, transparent 70%);
+      top: -100px; left: -100px;
+      animation: drift1 12s ease-in-out infinite alternate;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(123,94,167,0.18) 0%, transparent 70%);
+      bottom: -80px; right: -80px;
+      animation: drift2 15s ease-in-out infinite alternate;
+    }
+    @keyframes drift1 { to { transform: translate(60px, 80px); } }
+    @keyframes drift2 { to { transform: translate(-60px, -60px); } }
+
+    /* ── Main wrapper ── */
+    .scene {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    /* ── Gear icon SVG ── */
+    .gear-wrap {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .gear-wrap svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 16px var(--accent));
+    }
+    .gear-outer { animation: spinSlow 8s linear infinite; transform-origin: center; }
+    .gear-inner { animation: spinSlow 6s linear infinite reverse; transform-origin: center; }
+
+    /* ── Headline ── */
+    .headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+    .headline span {
+      color: var(--accent);
+      text-shadow: 0 0 30px rgba(0,229,255,0.5);
+    }
+
+    /* ── Subtitle ── */
+    .subtitle {
+      margin-top: 1.2rem;
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 440px;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      margin: 2.2rem auto;
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.75s forwards;
+    }
+
+    /* ── Thank-you badge ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 1.3rem;
+      border: 1px solid rgba(0,229,255,0.22);
+      border-radius: 100px;
+      background: rgba(0,229,255,0.05);
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.9s forwards;
+      box-shadow: 0 0 20px rgba(0,229,255,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* ── Progress bar ── */
+    .progress-wrap {
+      margin-top: 2.5rem;
+      width: min(320px, 90vw);
+      opacity: 0;
+      animation: fadeUp 0.8s 1.05s forwards;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .progress-track {
+      height: 4px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      box-shadow: 0 0 10px var(--accent);
+      animation: fillBar 2.5s 1.3s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    @keyframes fillBar { to { width: 73%; } }
+
+    /* ── Shared fade-up ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spinSlow { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<section class="scene">
+
+  <!-- Gear -->
+  <div class="gear-wrap">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g class="gear-outer">
+        <path fill="#00e5ff" fill-opacity="0.15" d="M32 8a24 24 0 1 0 0 48A24 24 0 0 0 32 8Z"/>
+        <path stroke="#00e5ff" stroke-width="2" stroke-linecap="round"
+          d="M32 4v6M32 54v6M4 32h6M54 32h6M10.1 10.1l4.2 4.2M49.7 49.7l4.2 4.2M10.1 53.9l4.2-4.2M49.7 14.3l4.2-4.2"/>
+        <circle cx="32" cy="32" r="20" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="3 3"/>
+      </g>
+      <g class="gear-inner">
+        <circle cx="32" cy="32" r="10" fill="#00e5ff" fill-opacity="0.1" stroke="#00e5ff" stroke-width="1.5"/>
+        <circle cx="32" cy="32" r="4" fill="#00e5ff" fill-opacity="0.6"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Text -->
+  <h1 class="headline">Making This<br/><span>Better</span></h1>
+  <p class="subtitle">We're currently under maintenance, improving things behind the scenes. Please visit again soon.</p>
+
+  <div class="divider"></div>
+
+  <div class="badge">
+    <span class="badge-dot"></span>
+    Thank you for your patience
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progress</span>
+      <span id="pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+</section>
+
+<script>
+  /* ── Starfield ── */
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function mkStars(n = 160) {
+    stars = Array.from({length: n}, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.2 + 0.2,
+      a: Math.random(),
+      speed: Math.random() * 0.004 + 0.001,
+      drift: (Math.random() - 0.5) * 0.08
+    }));
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, W, H);
+    stars.forEach(s => {
+      s.a += s.speed;
+      s.x += s.drift;
+      if (s.x > W + 2) s.x = -2;
+      if (s.x < -2) s.x = W + 2;
+      const alpha = (Math.sin(s.a) * 0.5 + 0.5) * 0.7 + 0.1;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200, 230, 255, ${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+
+  resize();
+  mkStars();
+  drawStars();
+  window.addEventListener('resize', () => { resize(); mkStars(); });
+
+  /* ── Animate percentage counter ── */
+  setTimeout(() => {
+    const el = document.getElementById('pct');
+    let v = 0;
+    const end = 73;
+    const dur = 2500;
+    const step = dur / end;
+    const t = setInterval(() => {
+      v = Math.min(v + 1, end);
+      el.textContent = v + '%';
+      if (v >= end) clearInterval(t);
+    }, step);
+  }, 1300);
+</script>
+</body>
+</html>
