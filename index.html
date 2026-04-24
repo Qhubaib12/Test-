@@ -1,10 +1,189 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="refresh" content="0; url=https://drive.google.com/file/d/1g2suNWJEqyAQWUcv2l1hFhAsN6JYGA6q/view?usp=sharing" />
-    <script>window.location.replace("https://drive.google.com/file/d/1g2suNWJEqyAQWUcv2l1hFhAsN6JYGA6q/view?usp=sharing");</script>
-  </head>
-  <body>
-    <p>Redirecting to resume... <a href="https://drive.google.com/file/d/1g2suNWJEqyAQWUcv2l1hFhAsN6JYGA6q/view?usp=sharing">Click here</a> if not redirected.</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f7f5f0;
+      --surface: #ffffff;
+      --border: #e0dbd0;
+      --ink: #1a1814;
+      --accent: #2a52be;
+      --accent-hover: #1a3a9e;
+      --muted: #7a756a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top bar */
+    header {
+      background: var(--ink);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      animation: slideDown 0.5s ease both;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .header-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #f7f5f0;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .header-label span {
+      color: #6a8fff;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .download-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .download-btn svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Main */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px 60px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .viewer-wrap {
+      width: 100%;
+      max-width: 860px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .viewer-bar {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+
+    .viewer-url {
+      margin-left: 12px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: 85vh;
+      border: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-label">My <span>Resume</span></div>
+    <a
+      class="download-btn"
+      href="https://drive.google.com/uc?export=download&id=1g2suNWJEqyAQWUcv2l1hFhAsN6JYGA6q"
+      target="_blank"
+      rel="noopener"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 15V3M12 15l-4-4M12 15l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21H19.44a2 2 0 0 0 1.94-1.515L22 17"/>
+      </svg>
+      Download PDF
+    </a>
+  </header>
+
+  <main>
+    <div class="viewer-wrap">
+      <div class="viewer-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="viewer-url">resume.pdf — Google Drive</span>
+      </div>
+      <iframe
+        src="https://drive.google.com/file/d/1g2suNWJEqyAQWUcv2l1hFhAsN6JYGA6q/preview"
+        allow="autoplay"
+        title="Resume PDF"
+      ></iframe>
+    </div>
+  </main>
+
+  <footer>Hosted resume · PDF viewer powered by Google Drive</footer>
+
+</body>
 </html>
